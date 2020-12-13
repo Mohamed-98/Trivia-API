@@ -24,18 +24,18 @@ class QuestionView extends Component {
   getQuestions = () => {
     $.ajax({
       url: `/questions?page=${this.state.page}`, //TODO: update request URL
-      type: "GET",
-      success: (result) => {
+      type: 'GET',
+      success: result => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
           categories: result.categories,
           currentCategory: result.current_category })
-        return;
+        return
       },
-      error: (error) => {
+      error: error => {
         alert('Unable to load questions. Please try your request again')
-        return;
+        return
       }
     })
   }
@@ -61,15 +61,15 @@ class QuestionView extends Component {
   getByCategory= (id) => {
     $.ajax({
       url: `/categories/${id}/questions`, //TODO: update request URL
-      type: "GET",
-      success: (result) => {
+      type: 'GET',
+      success: result => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
           currentCategory: result.current_category })
         return;
       },
-      error: (error) => {
+      error: error => {
         alert('Unable to load questions. Please try your request again')
         return;
       }
@@ -79,7 +79,7 @@ class QuestionView extends Component {
   submitSearch = (searchTerm) => {
     $.ajax({
       url: `/questions`, //TODO: update request URL
-      type: "POST",
+      type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({searchTerm: searchTerm}),
@@ -87,14 +87,14 @@ class QuestionView extends Component {
         withCredentials: true
       },
       crossDomain: true,
-      success: (result) => {
+      success: result => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
           currentCategory: result.current_category })
         return;
       },
-      error: (error) => {
+      error: error => {
         alert('Unable to load questions. Please try your request again')
         return;
       }
@@ -106,11 +106,11 @@ class QuestionView extends Component {
       if(window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
           url: `/questions/${id}`, //TODO: update request URL
-          type: "DELETE",
-          success: (result) => {
+          type: 'DELETE',
+          success: result => {
             this.getQuestions();
           },
-          error: (error) => {
+          error: error => {
             alert('Unable to load questions. Please try your request again')
             return;
           }
