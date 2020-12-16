@@ -59,8 +59,38 @@ def create_app(test_config=None):
     def delet_questions(question_id):
         question = Question.query.get(question_id)
         question.delete()
-        return jsonify({
-            'success': True,
-            'deleted': question_id
-        })
+        if question is None:
+            abort(405)
+
+        else:
+            return jsonify({
+                'success': True,
+                'deleted': question_id
+            })
+
+    @app.route('/questions', methods=['POST'])
+    def create_questions():
+        body = request.get_json()
+        #if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
+        #    abort(422)
+
+        new_question = body.get('question', None)
+        new_answer = body.get('answer', None)
+        new_category = body.get('category', None)
+        new_difficulty = body.get('difficulty', None)
+
+        try:
+            question = Question(question=new_question, answer=new_answer,
+                                category=new_category, difficulty=new_difficulty)
+            question.insert()
+            
+            #selection = Question.query.get(question_id).all()
+            #current_question = 
+            return jsonify({
+                'success': True,
+                'new_question': question.id
+            })
+
+        except:
+            abort(422)
     return app
