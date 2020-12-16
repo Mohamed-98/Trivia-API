@@ -110,12 +110,12 @@ ALTER TABLE ONLY public.questions ALTER COLUMN id SET DEFAULT nextval('public.qu
 --
 
 COPY public.categories (id, type) FROM stdin;
-1	Science
-2	Art
-3	Geography
-4	History
-5	Entertainment
-6	Sports
+2	Science
+3	Art
+4	Geography
+5	History
+6	Entertainment
+7	Sports
 \.
 
 
