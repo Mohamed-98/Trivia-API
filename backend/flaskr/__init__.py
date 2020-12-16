@@ -55,4 +55,12 @@ def create_app(test_config=None):
                 category.id: category.type for category in categories}
         })
     
+    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    def delet_questions(question_id):
+        question = Question.query.get(question_id)
+        question.delete()
+        return jsonify({
+            'success': True,
+            'deleted': question_id
+        })
     return app
