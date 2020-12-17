@@ -115,18 +115,19 @@ def create_app(test_config=None):
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def list_questions(category_id):
         try:
-            category = Category.query.filter_by(
-                id=category_id).one_or_none()
-            questions = Question.query.filter_by(category=category_id).all()
+            #category = Category.query.filter_by(
+            #    id=category_id).one_or_none()
+            questions = Question.query.filter(
+                Question.category == str(category_id)).all()
             total_questions = len(questions)
-            questions = Question.query.all()
-            formatted_Question = [question.format() for question in questions]
-            questions_page = formatted_Question[start:end]
+            #questions = Question.query.all()
+            #formatted_Question = [question.format() for question in questions]
+            #questions_page = formatted_Question[start:end]
             return jsonify({
                 'success': True,
-                'questions': questions_page,
+                'questions': [question.format() for question in questions],
                 'totalQuestions': total_questions,
-                'categories': category.type
+                'categories': category_id
             })
         except:
             abort(404)
