@@ -18,12 +18,12 @@ class FormView extends Component {
   componentDidMount(){
     $.ajax({
       url: `/categories`, //TODO: update request URL
-      type: "GET",
-      success: (result) => {
+      type: 'GET',
+      success: result => {
         this.setState({ categories: result.categories })
         return;
       },
-      error: (error) => {
+      error: error => {
         alert('Unable to load categories. Please try your request again')
         return;
       }
@@ -35,7 +35,7 @@ class FormView extends Component {
     event.preventDefault();
     $.ajax({
       url: '/questions', //TODO: update request URL
-      type: "POST",
+      type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -48,11 +48,11 @@ class FormView extends Component {
         withCredentials: true
       },
       crossDomain: true,
-      success: (result) => {
+      success: result => {
         document.getElementById("add-question-form").reset();
         return;
       },
-      error: (error) => {
+      error: error => {
         alert('Unable to add question. Please try your request again')
         return;
       }

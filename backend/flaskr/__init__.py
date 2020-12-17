@@ -93,4 +93,42 @@ def create_app(test_config=None):
 
         except:
             abort(422)
+
+    @app.route('/questions/search', methods=['POST'])
+    def searching():
+        body = request.get_json()
+        search = body.get('Search')
+
+        try:
+            search_res = Question.query.filter(
+            Question.question.ilike(f'%{Search}%')).all()
+            
+            return jsonify({
+                'success': True,
+                'questions': [question.format() for question in search_res],
+                'total_questions': len(search_res),
+                'current_category': None
+            })
+        except:
+            abort(404)
+
+    @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+    def list_questions(category_id):
+        try:
+            category = Category.query.filter_by(
+                id=category_id).one_or_none()
+            questions = Question.query.filter_by(category=category_id).all()
+            total_questions = len(questions)
+            questions = Question.query.all()
+            formatted_Question = [question.format() for question in questions]
+            questions_page = formatted_Question[start:end]
+            return jsonify({
+                'success': True,
+                'questions': questions_page,
+                'totalQuestions': total_questions,
+                'categories': category.type
+            })
+        except:
+            abort(404)
+
     return app
