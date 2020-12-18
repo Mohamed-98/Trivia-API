@@ -9,6 +9,15 @@ from models import setup_db, Question, Category
 QUESTIONS_PER_PAGE = 10
 
 
+def paginate_questions(request, selection):
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+
+    question = [question.format() for question in selection]
+    current_question = question[start:end]
+    return current_question
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -58,14 +67,19 @@ def create_app(test_config=None):
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delet_questions(question_id):
         question = Question.query.get(question_id)
-        question.delete()
+        
         if question is None:
-            abort(405)
+            abort(404)
 
-        else:
-            return jsonify({
-                'success': True,
-                'deleted': question_id
+        question.delete()
+        selection = Question.query.order_by(Question.id).all()
+        current_questions = paginate_questions(request, selection)
+
+        return jsonify({
+            'success': True,
+            'deleted': question_id,
+            'question': current_questions,
+            'total_question': len(Question.query.all())
             })
 
     @app.route('/questions', methods=['POST'])
@@ -78,17 +92,19 @@ def create_app(test_config=None):
         new_answer = body.get('answer', None)
         new_category = body.get('category', None)
         new_difficulty = body.get('difficulty', None)
-
+        
         try:
             question = Question(question=new_question, answer=new_answer,
                                 category=new_category, difficulty=new_difficulty)
             question.insert()
-            
-            #selection = Question.query.get(question_id).all()
-            #current_question = 
+            questions = Question.query.all()
+            formatted_Question = [question.format() for question in questions]
+            questions_page = formatted_Question[start:end]
             return jsonify({
                 'success': True,
-                'new_question': question.id
+                'new_question': question.id,
+                'total_questions': questions,
+                'questions': questions_page
             })
 
         except:
@@ -152,11 +168,21 @@ def create_app(test_config=None):
                 'question': question.format()
             })
 
-    @app.errorhandler(400)
-    def bad_request(error):
+    @app.errorhandler(404)
+    def not_found(error):
         return jsonify({
             "success": False,
-            "error": 400,
-            "message": "bad request"
-        }), 400
+            "error": 404,
+            "message": "resource not found"
+        }), 404
+
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
+
     return app
