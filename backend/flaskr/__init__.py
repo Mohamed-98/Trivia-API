@@ -46,7 +46,7 @@ def create_app(test_config=None):
         })
     
     @app.route('/questions', methods=['GET'])
-    def get_questions():
+    def get_all_questions():
         page = request.args.get('page', 1, type=int)
         start = (page - 1) * 10
         end = start + 10
@@ -65,7 +65,7 @@ def create_app(test_config=None):
         })
     
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
-    def delet_questions(question_id):
+    def delet_the_questions(question_id):
         question = Question.query.get(question_id)
         
         if question is None:
@@ -83,7 +83,7 @@ def create_app(test_config=None):
             })
 
     @app.route('/questions', methods=['POST'])
-    def create_questions():
+    def create_new_questions():
         body = request.get_json()
         #if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
         #    abort(422)
@@ -111,25 +111,24 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/questions/search', methods=['POST'])
-    def searching():
+    def search_in_questions():
         body = request.get_json()
-        search = body.get('Search')
+        search_term = body.get('searchTerm', None)
 
-        try:
-            search_res = Question.query.filter(
-            Question.question.ilike(f'%{Search}%')).all()
-            
+        if search_term:
+            search_results = Question.query.filter(
+                Question.question.ilike(f'%{search_term}%')).all()
+
             return jsonify({
                 'success': True,
-                'questions': [question.format() for question in search_res],
-                'total_questions': len(search_res),
+                'questions': [question.format() for question in search_results],
+                'total_questions': len(search_results),
                 'current_category': None
             })
-        except:
-            abort(404)
+        abort(404)
 
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
-    def list_questions(category_id):
+    def list_all_questions(category_id):
         try:
             #category = Category.query.filter_by(
             #    id=category_id).one_or_none()
