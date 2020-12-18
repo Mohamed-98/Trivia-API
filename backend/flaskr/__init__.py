@@ -82,7 +82,7 @@ def create_app(test_config=None):
             'total_question': len(Question.query.all())
             })
 
-    @app.route('/questions', methods=['POST'])
+    @app.route('/questions/new', methods=['POST'])
     def create_new_questions():
         body = request.get_json()
         #if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
