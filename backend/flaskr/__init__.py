@@ -97,14 +97,16 @@ def create_app(test_config=None):
             question = Question(question=new_question, answer=new_answer,
                                 category=new_category, difficulty=new_difficulty)
             question.insert()
-            #questions = Question.query.all()
+            questions = Question.query.all()
+            selection = Question.query.order_by(Question.id).all()
+            current_questions = paginate_questions(request, selection)
             #formatted_Question = [question.format() for question in questions]
             #questions_page = formatted_Question[start:end]
             return jsonify({
                 'success': True,
                 'new_question': question.id,
-                #'total_questions': questions,
-                #'questions': questions_page
+                'total_questions': len(questions),
+                'questions': current_questions
             })
 
         except:
