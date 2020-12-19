@@ -163,14 +163,14 @@ def create_app(test_config=None):
             last_questions = body.get('previous_questions')
 
             if quizzes_category['type'] == 'click':
-                available_questions = Question.query.filter(
+                task_questions = Question.query.filter(
                     Question.id.notin_((last_questions))).all()
             else:
-                available_questions = Question.query.filter_by(
+                task_questions = Question.query.filter_by(
                     category=quizzes_category['id']).filter(Question.id.notin_((last_questions))).all()
 
-            next_question = available_questions[random.randrange(
-                0, len(available_questions))].format() if len(available_questions) > 0 else None
+            next_question = task_questions[random.randrange(
+                0, len(task_questions))].format() if len(task_questions) > 0 else None
 
             return jsonify({
                 'success': True,
