@@ -158,22 +158,26 @@ def create_app(test_config=None):
     @app.route('/quizzes', methods=['POST'])
     def quizz():
         body = request.get_json()
-        if not body:
-            abort(404)
-        category = body.get('quiz_category')
-        previous_questions = body.get('previous_questions')
-        category_id = int(category['id'])
-        if category_id == 0:
-            selection = Question.query.order_by(func.random())
-        else:
-            selection = Question.query.filter(
-                Question.category == category_id).order_by(func.random())
-            question = selection.filter(Question.id.notin_(
-                previous_questions)).first()
+        if not (body == None):
+            quizzes_category = body.get('quiz_category')
+            last_questions = body.get('previous_questions')
+
+            if quizzes_category['type'] == 'click':
+                available_questions = Question.query.filter(
+                    Question.id.notin_((last_questions))).all()
+            else:
+                available_questions = Question.query.filter_by(
+                    category=quizzes_category['id']).filter(Question.id.notin_((last_questions))).all()
+
+            next_question = available_questions[random.randrange(
+                0, len(available_questions))].format() if len(available_questions) > 0 else None
+
             return jsonify({
                 'success': True,
-                'question': question.format()
+                'question': next_question
             })
+        else:
+            abort(422)
 
     @app.errorhandler(404)
     def not_found(error):
@@ -191,5 +195,14 @@ def create_app(test_config=None):
             "error": 422,
             "message": "unprocessable"
         }), 422
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            'success': False,
+            'error': 400,
+            'message': 'bad request'
+        }), 400
+
 
     return app
