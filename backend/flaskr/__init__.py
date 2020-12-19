@@ -97,18 +97,26 @@ def create_app(test_config=None):
             question = Question(question=new_question, answer=new_answer,
                                 category=new_category, difficulty=new_difficulty)
             question.insert()
-            questions = Question.query.all()
-            formatted_Question = [question.format() for question in questions]
-            questions_page = formatted_Question[start:end]
+            #questions = Question.query.all()
+            #formatted_Question = [question.format() for question in questions]
+            #questions_page = formatted_Question[start:end]
             return jsonify({
                 'success': True,
                 'new_question': question.id,
-                'total_questions': questions,
-                'questions': questions_page
+                #'total_questions': questions,
+                #'questions': questions_page
             })
 
         except:
             abort(422)
+
+    @app.route('/categories/questions', methods=['GET'])
+    def view_all_categories():
+        categories = Category.query.order_by(Category.type).all()
+        return jsonify({
+            'success': True,
+            'categories': {category.id: category.type for category in categories}
+        })
 
     @app.route('/questions/search', methods=['POST'])
     def search_in_questions():
