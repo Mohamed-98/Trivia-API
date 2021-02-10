@@ -20,7 +20,6 @@ npm install
 
 >_tip_: **npm i** is shorthand for **npm install**
 
-## Required Tasks
 
 ## Running Your Frontend in Dev Mode
 
