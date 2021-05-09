@@ -30,3 +30,48 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser. T
 ```bash
 npm start
 ```
+## File directory tree structure
+```
+.
+├── README.md
+├── package-lock.json
+├── package.json
+├── public
+│   ├── art.svg
+│   ├── delete.png
+│   ├── entertainment.svg
+│   ├── favicon.ico
+│   ├── geography.svg
+│   ├── history.svg
+│   ├── index.html
+│   ├── manifest.json
+│   ├── science.svg
+│   └── sports.svg
+└── src
+    ├── App.js
+    ├── App.test.js
+    ├── components
+    │   ├── FormView.js
+    │   ├── Header.js
+    │   ├── Question.js
+    │   ├── QuestionView.js
+    │   ├── QuizView.js
+    │   ├── Search.js
+    │   ├── art.svg
+    │   ├── entertainment.svg
+    │   ├── geography.svg
+    │   ├── history.svg
+    │   ├── science.svg
+    │   └── sports.svg
+    ├── index.js
+    ├── logo.svg
+    ├── serviceWorker.js
+    └── stylesheets
+        ├── App.css
+        ├── FormView.css
+        ├── Header.css
+        ├── Question.css
+        ├── QuizView.css
+        └── index.css
+```
+4 directories, 36 files
