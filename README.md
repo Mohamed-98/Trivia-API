@@ -19,6 +19,7 @@ We started the full stack application for you. It is desiged with some key funct
 ### Backend
 
 The `./backend` directory contains a partially completed Flask and SQLAlchemy server.
+
 [View the README.md within ./Backend for more details.](./Backend/README.md)
 
 
