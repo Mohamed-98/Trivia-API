@@ -276,3 +276,24 @@ createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+
+## File directory tree structure
+```
+.
+├── README.md
+├── __pycache__
+│   ├── models.cpython-38.pyc
+│   └── models.cpython-39.pyc
+├── flaskr
+│   ├── __init__.py
+│   └── __pycache__
+│       ├── __init__.cpython-38.pyc
+│       └── __init__.cpython-39.pyc
+├── models.py
+├── pip
+├── requirements.txt
+├── test_flaskr.py
+└── trivia.psql
+```
+
+3 directories, 11 files
